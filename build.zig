@@ -193,8 +193,12 @@ pub fn build(b: *std.Build) !void {
 		.name = "Cubyz",
 		.root_module = mainModule,
 		//.sanitize_thread = true,
-		.use_llvm = true,
 	});
+	
+	// For fast zls "build_on_save"
+	const CheckStep = b.step("Check", "Build without producing artifacts");
+	CheckStep.dependOn(&exe.step);
+	
 	exe.root_module.addOptions("build_options", options);
 	exe.root_module.addImport("main", mainModule);
 	try addModFeatures(b, exe);
